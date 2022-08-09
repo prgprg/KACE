@@ -1,0 +1,46 @@
+- name: disabling salt
+  shell: yum-config-manager --disable salt-latest
+
+
+
+- name: installing dependencies
+  yum:
+    name: "{{ packages }}"
+    state: latest
+  vars:
+    packages:
+     - cups-client
+     - pciutils
+     - psmisc
+     - perl
+     - glibc
+  when: ansible_distribution_major_version== '7' #and ansible_distribution == 'CentOS'
+- name: install CentOS 6 dependencies
+  yum:
+    name: "{{ packages }}"
+    state: latest
+  vars:
+    packages:
+      - cups
+      - libc.so.6
+      - libstdc++
+      - glibc
+  when: ansible_distribution_major_version== '6' 
+
+
+# - name: enabling salt
+#   shell: yum-config-manager --enable salt-latest
+
+- name: Downloading agent
+  get_url:
+    url: http://gb80-packages.inform-software.com/kace/{{ kaceagent_rhel }}
+    dest: /opt/{{ kaceagent_rhel }}
+    use_proxy: no
+
+- name: Installing agent
+  shell: "rpm --upgrade --force /opt/{{ kaceagent_rhel }}"
+
+- name: Removing installation file
+  file:
+    state: absent
+    path: /opt/{{ kaceagent_rhel }}

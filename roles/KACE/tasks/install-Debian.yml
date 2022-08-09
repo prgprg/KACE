@@ -1,0 +1,14 @@
+- name: Downloading agent
+  get_url:
+    url: http://gb80-packages.inform-software.com/kace/{{ kaceagent_debian_ubuntu }}
+    dest: /opt/{{ kaceagent_debian_ubuntu }}
+
+- name: Installing agent
+  apt:
+    deb: /opt/{{ kaceagent_debian_ubuntu }}
+    state: present
+
+- name: Removing installation file
+  file:
+    state: absent
+    path: /opt/{{ kaceagent_debian_ubuntu }}

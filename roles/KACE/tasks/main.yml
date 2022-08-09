@@ -1,0 +1,19 @@
+---
+
+#- debug: var=ansible_distribution
+- name: Include specific OS variables
+  include_vars: '{{ item }}'
+  with_first_found:
+    - files:
+        - '{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml'
+        - '{{ ansible_os_family }}.yml'
+      skip: true
+
+- name: Execute specific OS tasks
+  include: install-{{ ansible_os_family }}.yml
+
+
+# - name: glibc
+  # yum: 
+    # name: glibc
+    # state: latest

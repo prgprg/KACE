@@ -1,0 +1,15 @@
+- name: Downloading agent
+  get_url:
+    url: http://gb80-packages.inform-software.com/kace/{{ kaceagent_suse }}
+    dest: /opt/{{ kaceagent_suse }}
+
+- name: Installing agent
+  zypper:
+    name: /opt/{{ kaceagent_suse }}
+    disable_gpg_check: yes
+    state: present
+
+- name: Removing installation file
+  file:
+    state: absent
+    path: /opt/{{ kaceagent_suse }}
